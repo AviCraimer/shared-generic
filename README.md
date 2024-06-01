@@ -1,3 +1,3 @@
-# Knowledge Network Library
+# Shared Generic Module
 
-A library for developing knowledge driven applications.
+An attempt to put all my re-usable general purpose types and utilities in one place for easy re-use.
