@@ -8,6 +8,6 @@ export { getPairSort, getOptionalSort, sortCBs } from "./sorting";
 
 export { Hashable, hash, HashString } from "./hashing";
 
-export { clone } from "./thirdParty";
+export { clone } from "./basicFns";
 
 export { getUniqueIntGenerator, getSequentialKey } from "./misc";

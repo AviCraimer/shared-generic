@@ -1,3 +1,4 @@
 export * from "./TupleUtils";
 export * from "./typeTesting";
-export * from "./unionsAndLiterals";
+export * from "./unions";
+export * from "./LiteralTypes";

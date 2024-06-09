@@ -20,6 +20,7 @@
     },
     "dependencies": {
         "@types/lodash": "^4.17.0",
+        "graphology": "^0.25.4",
         "lodash": "^4.17.21",
         "nanoid": "3.3.4",
         "object-hash": "^3.0.0"

@@ -1,18 +1,11 @@
-import { Assert } from "./typeTesting";
+import { And } from "./boolean";
+import { IsLiteral } from "./allLiterals";
 
-// Switches from co-variant to contra-variant
-type Contra<T> = T extends any ? (arg: T) => void : never;
-
-type InferContra<T> = [T] extends [(arg: infer I) => void] ? I : never;
-
-//Picks a single element from a union
-type PickOne<T> = InferContra<InferContra<Contra<Contra<T>>>>;
-
-// Converts a Union to Tuple
-export type UnionToTuple<T> = PickOne<T> extends infer U ? (Exclude<T, U> extends never ? [T] : [...UnionToTuple<Exclude<T, U>>, U]) : never;
+export type IsString<T> = T extends string ? true : false;
 
 // Returns type if it is a finite union strings.
 export type FiniteStringUnion<T> = T extends `${infer Literal}` ? T : never;
+// TODO: Add tests
 
 // Gets the size of a string union type
 export type StringUnionSize<T> = FiniteStringUnion<T> extends never ? "Infinity" : UnionToTuple<T>["length"];
@@ -34,3 +27,7 @@ type TestLiteral3 = Assert<LiteralString<"cat" | "dog" | string> extends never ?
 export const literalString = <const T extends [T[0] & LiteralString<T[0]>]>(...literalString: T) => literalString[0];
 
 const myLiteral = literalString("cat");
+
+export type NonEmptyString<T> = T extends "" ? never : T;
+
+export type IsStringLiteral<T> = And<[IsLiteral<T>, IsString<T>]>;
