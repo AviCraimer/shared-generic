@@ -1,23 +1,27 @@
+import { NonNever } from "../never";
 import { ProperSubtypeDist, Deny, Assert } from "../typeTesting";
-import { RemoveBoolean } from "./boolean";
+import { And, RemoveBoolean } from "./boolean";
 
 // Boolean literal sets are different since boolean itself is a finite set.
-export type IsFiniteLiteral<T> = RemoveBoolean<T> extends never ? (T extends boolean ? true : false) : ProperSubtypeDist<RemoveBoolean<T>, string | number | symbol>;
+type IsFiniteLiteralOrNever<T> = RemoveBoolean<T> extends never ? (T extends boolean ? true : false) : ProperSubtypeDist<RemoveBoolean<T>, string | number | symbol>;
+
+type IsFiniteLiteral<T> = And<[NonNever<T>, IsFiniteLiteralOrNever<T>]>;
 
 const testSymbol = Symbol("cat");
 type TestSymbol = typeof testSymbol;
-type TestFiniteLiterals1 = Assert<IsFiniteLiteral<"cat">>;
-type TestFiniteLiterals2 = Assert<IsFiniteLiteral<"cat" | "dog" | false>>;
-
-// TODO: This is an issue.
-type TestFiniteLiterals25 = Deny<IsFiniteLiteral<boolean | string>>;
-type TestFiniteLiterals3 = Assert<IsFiniteLiteral<TestSymbol | 1 | "cat">>;
-type TestFiniteLiterals4 = Deny<IsFiniteLiteral<TestSymbol | number>>;
-type TestFiniteLiterals5 = Deny<IsFiniteLiteral<"dog" | symbol>>;
+type TestIsFiniteLiteral1 = Assert<IsFiniteLiteral<"cat">>;
+type TestIsFiniteLiteral15 = Deny<IsFiniteLiteral<never>>;
+type TestIsFiniteLiteral2 = Assert<IsFiniteLiteral<"cat" | "dog" | false>>;
+type TestIsFiniteLiteral25 = Deny<IsFiniteLiteral<boolean | string>>;
+type TestIsFiniteLiteral3 = Assert<IsFiniteLiteral<TestSymbol | 1 | "cat">>;
+type TestIsFiniteLiteral4 = Deny<IsFiniteLiteral<TestSymbol | number>>;
+type TestIsFiniteLiteral5 = Deny<IsFiniteLiteral<"dog" | symbol>>;
+type TestIsFiniteLiteral6 = Deny<IsFiniteLiteral<never>>;
 
 export type IsLiteral<T> = IsFiniteLiteral<T> extends false ? false : UnionToTuple<T>["length"] extends 1 ? true : false;
 
-type TestIsSingletonLiteral1 = Deny<IsLiteral<boolean>>;
+type TestIsSingletonLiteral1 = Deny<IsLiteral<never>>;
+type TestIsSingletonLiteral15 = Deny<IsLiteral<boolean>>;
 type TestIsSingletonLiteral2 = Assert<IsLiteral<true>>;
 type TestIsSingletonLiteral3 = Assert<IsLiteral<"cat" | "cat">>;
 type TestIsSingletonLiteral4 = Assert<IsLiteral<`${"cat"}`>>;

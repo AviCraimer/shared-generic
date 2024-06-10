@@ -1,5 +1,3 @@
-import { ProperSubtypeOf } from "./typeTesting";
-
 // *** Type Predicates ***
 
 // Strict subtype checking, will not distribute across unions.
@@ -28,8 +26,6 @@ type TestProperSubtypeDist5 = Deny<ProperSubtypeDist<string, number | string>>;
 type TestProperSubtypeDist6 = Deny<ProperSubtypeDist<boolean, true | false>>;
 // Since boolean is defined as a finite union true|false the distribution does not have any proper subtypes.
 type TestProperSubtypeDist7 = Deny<ProperSubtypeDist<true, boolean>>;
-
-export type Inhabited<T> = T extends never ? false : true;
 
 // *** Trigger Type Errors for Tests ***
 export type Assert<T extends true> = never;

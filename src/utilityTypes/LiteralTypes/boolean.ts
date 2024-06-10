@@ -39,11 +39,27 @@ type TestAnd1 = Deny<And<[false, true, true]>>;
 type TestAnd2 = Deny<And<[boolean, true]>>;
 type TestAnd3 = Assert<And<[true, true, true]>>;
 
-export type Or<T extends BooleanTuple> = BooleanLiteralTuple<T> extends never ? false : T extends AllFalseTuple ? false : true;
+export type Or<T extends unknown[]> =
+T extends [infer Head, ...infer Rest] ?
+    true extends Head ?
+        true:
+        Or<Rest>:
+    false
+
 type TestOr1 = Assert<Or<[false, true, true]>>;
 type TestOr2 = Assert<Or<[true, true, true]>>;
-type TestOr3 = Deny<Or<[true, boolean]>>;
-type TestOr4 = Deny<Or<[false, false, false]>>;
+type TestOr3 = Assert<Or<[true, boolean]>>;
+type TestOr4 = Assert<Or<[false, boolean]>>;
+type TestOr6 = Deny<Or<[false, false]>>;
+type TestOr7 = Deny<Or<[false, false, false]>>;
+
+
+// This ensures the tuple passed is a BooleanLiteralTuple
+export type OrStrict<T extends BooleanTuple> = BooleanLiteralTuple<T> extends never ? false : T extends AllFalseTuple ? false : true;
+type TestOrStrict1 = Assert<OrStrict<[false, true, true]>>;
+type TestOrStrict2 = Assert<OrStrict<[true, true, true]>>;
+type TestOrStrict3 = Deny<OrStrict<[true, boolean]>>;
+type TestOrStrict4 = Deny<OrStrict<[false, false, false]>>;
 
 export type Not<T> = T extends true ? false : T extends false ? true : boolean;
 
