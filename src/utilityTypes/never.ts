@@ -1,21 +1,7 @@
 
 import { Deny, Assert } from "./typeTesting";
 
-
-
 export type IsNever<T> = [T] extends [never] ? true : false;
-
-// TODO: Move this to file
-// This includes both never[] and empty tuple [] types but not [never]
-// Note that an empty array is not an empty type since it has a value = [].
-type IsEmptyArray<T> = [T] extends [[never]] ? false :  [T] extends [never[]]  ? true : false
-
-type TestIsEmptyArray1 = Deny<IsEmptyArray<[never]>>
-type TestIsEmptyArray2 = Deny<IsEmptyArray<[string]>>
-type TestIsEmptyArray3 = Deny<IsEmptyArray<string[]>>
-type TestIsEmptyArray4 = Assert<IsEmptyArray<[]>>
-type TestIsEmptyArray5 = Assert<IsEmptyArray<never[]>>
-type TestIsEmptyArray6 = Deny<IsEmptyArray<string>>
 
 // This recursively tests for non-insatiability and distributes across unions (with the exception of never itself).
 type IsEmptyDistributed<T> =
@@ -86,7 +72,7 @@ type TestIsEmptyTypeUnion14 = Deny<IsEmptyType<{ foo: { bar: { baz: never | {foo
 
 
 
-export type Inhabited<T> =  [IsEmptyType<T>] extends [true]  ? false : true;
+export type Inhabited<T> =  IsEmptyType<T> extends true  ? false : true;
 
 type TestInhabited1  = Assert<Inhabited<{ foo: string; bar: "Cat"}>>;
 

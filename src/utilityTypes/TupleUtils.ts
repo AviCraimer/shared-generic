@@ -62,3 +62,16 @@ type TestIntersectionOfTuple3 = Assert<TypeEq<IntersectionOfTuple<[string, "cat"
 type TestIntersectionOfTuple4 = Assert<TypeEq<IntersectionOfTuple<[{}, { foo: number }, { foo: string }]>, { foo: never }>>;
 
 export type UnionOfTuple<T extends any[]> = T extends [infer U, ...infer Rest] ? U | UnionOfTuple<Rest> : true;
+
+
+// TODO: Move this to file
+// This includes both never[] and empty tuple [] types but not [never]
+// Note that an empty array is not an empty type since it has a value = [].
+type IsEmptyArray<T> = [T] extends [[never]] ? false :  [T] extends [never[]]  ? true : false
+
+type TestIsEmptyArray1 = Deny<IsEmptyArray<[never]>>
+type TestIsEmptyArray2 = Deny<IsEmptyArray<[string]>>
+type TestIsEmptyArray3 = Deny<IsEmptyArray<string[]>>
+type TestIsEmptyArray4 = Assert<IsEmptyArray<[]>>
+type TestIsEmptyArray5 = Assert<IsEmptyArray<never[]>>
+type TestIsEmptyArray6 = Deny<IsEmptyArray<string>>
